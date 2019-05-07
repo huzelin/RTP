@@ -1,0 +1,6 @@
+file(GLOB_RECURSE qed_source "qed/*.cc")
+file(GLOB_RECURSE qed_test_source "qed/*_test.cc")
+if(NOT ${qed_test_source})
+    list(REMOVE_ITEM qed_source ${qed_test_source})
+    rtp_add_test(${qed_test_source} "qed" rtp)
+endif()
