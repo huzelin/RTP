@@ -20,6 +20,7 @@ include(cmake/modules/common.cmake)
 include(cmake/modules/qed.cmake)
 
 list(APPEND SOURCE ${common_source} ${qed_source})
-add_library(rtp STATIC ${SOURCE})
+add_library(rtp_core STATIC ${SOURCE})
+target_link_libraries(rtp_core pthread rt)
 
 add_subdirectory(3rdparty)
