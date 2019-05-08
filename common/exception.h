@@ -61,14 +61,14 @@ class Exception : public std::exception {
 #define CONDITION_THROW(condition, ...)            \
     do { \
       if (!(condition)) { \
-        throw common::Exception(__FILE__, __LINE__, #condition, MakeString(__VA_ARGS__)); \
+        throw common::Exception(__FILE__, __LINE__, #condition, common::MakeString(__VA_ARGS__)); \
       } \
     } while (false)
 #endif
 
 #ifndef THROW
 #define THROW(...) \
-    throw common::Exception(__FILE__, __LINE__, "", MakeString(__VA_ARGS__))
+    throw common::Exception(__FILE__, __LINE__, "", common::MakeString(__VA_ARGS__))
 #endif
 
 #ifndef CHECK
