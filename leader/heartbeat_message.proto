@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+package leader;
+
+message HeartbeatMessage {
+    required bytes ip = 1;
+    required uint32 port = 2;
+}
