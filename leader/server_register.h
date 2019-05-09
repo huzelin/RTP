@@ -1,3 +1,7 @@
+/*!
+ * \file server_register.h
+ * \brief The server register base class
+ */
 #ifndef LEADER_SERVER_REGISTER_H_
 #define LEADER_SERVER_REGISTER_H_
 

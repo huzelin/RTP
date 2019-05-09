@@ -29,5 +29,5 @@ TEST(Waiter, TestAll) {
   thread2.join();
 }
 
-}  // namespace common 
+}  // namespace common
 

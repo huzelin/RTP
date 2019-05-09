@@ -2,8 +2,8 @@
  * \file thread_running_checker.h
  * \brief The thread running checker
  */
-#ifndef COMMON_THREAD_THREAD_RUNNING_CHECKER_H_
-#define COMMON_THREAD_THREAD_RUNNING_CHECKER_H_
+#ifndef COMMON_THREAD_RUNNING_CHECKER_H_
+#define COMMON_THREAD_RUNNING_CHECKER_H_
 
 #include <condition_variable>
 #include <mutex>
@@ -68,4 +68,4 @@ class ThreadRunningChecker {
 
 }  // namespace common
 
-#endif  // COMMON_THREAD_THREAD_RUNNING_CHECKER_H_
+#endif  // COMMON_THREAD_RUNNING_CHECKER_H_

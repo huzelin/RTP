@@ -1,20 +1,17 @@
 # Finds Google Protocol Buffers library and compilers and extends
 # the standard cmake script with version and python generation support
-set(PROTOBUF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/src/)
-set(PROTOBUF_PROTOC_EXECUTABLE ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/bin/protoc)
-set(PROTOBUF_LIBRARIES Tricky)
+set(PROTOBUF_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/include/)
+set(PROTOBUF_PROTOC_EXECUTABLE ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/bin/protoc)
+set(PROTOBUF_LIBRARIES ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/lib64)
 set(PROTOBUF_IMPORT_DIRS
-  ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/src/
+  ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/include/
 )
 find_package(Protobuf REQUIRED)
 include_directories(
-  ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/
-  ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/src/
+  ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/include/
 )
-include(${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.6.0/cmake/libprotobuf_src.cmake)
 
 set(PROTOBUF_GENERATE_CPP_APPEND_PATH TRUE)
-
 ################################################################################################
 # Modification of standard 'protobuf_generate_cpp()' with output dir parameter and python support
 # Usage:

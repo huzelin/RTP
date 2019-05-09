@@ -14,24 +14,28 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/
     ${PROJECT_SOURCE_DIR}/3rdparty/
     ${PROJECT_SOURCE_DIR}/3rdparty/zookeeper/zookeeper-3.4.14/include
+    ${PROJECT_SOURCE_DIR}/3rdparty/grpc/grpc-1.20.0/include
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -std=c++11 -fPIC -ftree-vectorize -Wcpp -g -DHAVE_PTHREAD")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -std=c++11 -fPIC -ftree-vectorize -Wcpp -g")
 
 # Add modules
 include(cmake/modules/common.cmake)
 include(cmake/modules/qed.cmake)
 include(cmake/modules/leader.cmake)
 
+add_subdirectory(3rdparty)
+
 list(APPEND SOURCE
     ${common_source}
     ${qed_source}
     ${leader_source}
-    # protobuf
-    ${libprotobuf_files}
-    ${libprotobuf_lite_files}
 )
 add_library(rtp_core STATIC ${SOURCE})
-target_link_libraries(rtp_core pthread rt)
+target_link_libraries(rtp_core
+    zookeeper
+    grpc++
+    protobuf
+    pthread
+    rt)
 
-add_subdirectory(3rdparty)

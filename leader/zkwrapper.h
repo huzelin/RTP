@@ -1,3 +1,7 @@
+/*!
+ * \file zkwrapper.h
+ * \brief zk wrapper
+ */
 #ifndef LEADER_ZKWRAPPER_H_
 #define LEADER_ZKWRAPPER_H_
 

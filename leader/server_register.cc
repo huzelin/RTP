@@ -1,4 +1,7 @@
-
+/*!
+ * \file server_register.cc
+ * \brief The basic server resgiter impls
+ */
 #include <string>
 #include <vector>
 
