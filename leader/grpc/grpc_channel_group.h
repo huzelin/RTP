@@ -32,7 +32,6 @@ class GrpcChannelGroup {
         spec_(spec),
         channel_pool_(channel_pool) {
     for (auto& pair : channels_) {
-      pair.first = nullptr;
       pair.second = false;
     }
   }
@@ -50,14 +49,14 @@ class GrpcChannelGroup {
    *         used unless a nullptr is passed to this interface,
    *         nullptr if group is full
    */
-  std::atomic<GRPCChannel*>* AddChannel(GRPCChannel* channel);
+  std::shared_ptr<GRPCChannel>* AddChannel();
 
   /**
    * @brief Get index of slot provided
    * @param slot
    * @return -1 if slot not belong to this group
    */
-  int GetIndexOfSlot(std::atomic<GRPCChannel*>* slot);
+  int GetIndexOfSlot(std::shared_ptr<GRPCChannel>* slot);
 
   void MoveChannelToGood(GRPCChannel* channel);
 
@@ -85,7 +84,7 @@ class GrpcChannelGroup {
   std::atomic<uint32_t> channel_count_;
   std::atomic<uint32_t> index_;
   /// we don't need a lock for this one since only its value can change
-  std::vector<std::pair<std::atomic<GRPCChannel*>,
+  std::vector<std::pair<std::shared_ptr<GRPCChannel>,
                         std::atomic<bool>>> channels_;
 };
 

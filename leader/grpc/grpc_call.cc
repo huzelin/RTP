@@ -4,8 +4,6 @@
  */
 #include "leader/grpc/grpc_call.h"
 
-#include "common/logging.h"
-
 namespace leader {
 
 CompletionQueue GrpcCall::cq; 
@@ -30,30 +28,20 @@ void GrpcCall::CompleteQueueShutDown() {
 
 void GrpcPingCall::Ping(GrpcChannelPool* channel_pool,
                         GRPCChannel* channel,
-                        const std::string& spec) {
-  std::shared_ptr<GRPCChannel> s_channel(channel);
-  std::unique_ptr<PingService::Stub> stub(PingService::NewStub(s_channel));
-
-  Request request;
+                        const std::string& spec,
+                        int timeout) {
   GrpcPingCall* call = new GrpcPingCall(channel_pool, channel, spec);
-  call->response_reader_ = stub->PrepareAsyncPing(&call->context_, request, &cq);
-  call->response_reader_->StartCall();
-  call->response_reader_->Finish(&call->reply_, &call->status_, (void*)call);
+  GrpcCall::PingImpl(call, channel, timeout);
 }
 
 void GrpcCheckerPingCall::Ping(GrpcChannelPool* channel_pool,
                                GRPCChannel* channel,
                                const std::string& spec,
+                               int timeout,
                                common::Waiter* waiter,
                                std::atomic<uint32_t>* bad) {
-  std::shared_ptr<GRPCChannel> s_channel(channel);
-  std::unique_ptr<PingService::Stub> stub(PingService::NewStub(s_channel));
-
-  Request request;
   GrpcCheckerPingCall* call = new GrpcCheckerPingCall(channel_pool, channel, spec, waiter, bad);
-  call->response_reader_ = stub->PrepareAsyncPing(&call->context_, request, &cq);
-  call->response_reader_->StartCall();
-  call->response_reader_->Finish(&call->reply_, &call->status_, (void*)call);
+  GrpcCall::PingImpl(call, channel, timeout);
 }
 
 }  // namespace leader

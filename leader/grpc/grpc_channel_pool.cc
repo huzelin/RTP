@@ -51,7 +51,6 @@ bool GrpcChannelPool::Init(int32_t work_thread_num,
     work_thread_num = GetLogicCpuNum();  // cpu_num as default
   }
 
-  // TODO: set connection callback for state
   return true;
 }
 
@@ -90,27 +89,31 @@ GRPCChannel* GrpcChannelPool::GetChannel(const string& spec) {
 void GrpcChannelPool::OpenNewChannel(const string& spec,
                                      GrpcChannelGroup* channelGroup) {
   // try take a slot by add null channel
-  auto slot = channelGroup->AddChannel(nullptr);
+  auto slot = channelGroup->AddChannel();
   if (slot == nullptr) {
     // all slots are taken
     LOG(WARNING) << "channel group[" << spec << "] is full now.";
     return;
   }
 
-  auto channel = grpc::CreateChannel(spec, grpc::InsecureChannelCredentials());
+  grpc::ChannelArguments channel_arguments;
+  auto channel = grpc::CreateCustomChannel(spec,
+                                           grpc::InsecureChannelCredentials(),
+                                           channel_arguments);
   if (channel == nullptr) {
     LOG(ERROR) << "Open channel failed, spec[" << spec << "].";
     return;
   }
   auto channel_ptr = channel.get();
-  slot->store(channel_ptr);
   channel_lock_.wrlock();
   channel_group_cache_[channel_ptr] = channelGroup;
   channel_lock_.unlock();
 
+  *slot = std::move(channel);
+
   // do Ping now, we don't care about result.
   // just use this to trigger MoveGood/Bad then set channel state.
-  GrpcPingCall::Ping(this, channel_ptr, spec);
+  GrpcPingCall::Ping(this, channel_ptr, spec, timeout_);
 
   DLOG(INFO) << "Open channel successfully spec:[" << spec << "] channel:" << channel_ptr;
 }
@@ -124,21 +127,9 @@ GrpcChannelGroup* GrpcChannelPool::FindChannelGroup(const std::string& spec,
   GrpcChannelGroup* channelGroup = nullptr;
   common::ScopedReadLock guard(channel_lock_);
   auto iter = channel_group_cache_.find(channel);
-  if (iter == channel_group_cache_.end()) {
-    auto cgIter = channel_pool_.find(spec);
-    if (cgIter == channel_pool_.end()) {
-      LOG(ERROR) << "Unknown spec:" << spec;
-      return nullptr;
-    }
-    channelGroup = cgIter->second;
-    if (channelGroup->AddChannel(channel) == nullptr) {
-      LOG(ERROR) << "Add channel to channel group " << spec << " failed";
-      return nullptr;
-    }
-    channel_group_cache_[channel] = channelGroup;
-  } else {
-    channelGroup = iter->second;
-  }
+  CHECK(iter != channel_group_cache_.end()) << "channel is not found in channel_cache.";
+  channelGroup = iter->second;
+  
   if (channelGroup == nullptr) {
     LOG(ERROR) << "Find channel group " << spec << " failed";
   }

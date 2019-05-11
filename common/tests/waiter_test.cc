@@ -7,6 +7,7 @@
 #include <thread>
 
 #include "common/waiter.h"
+#include "common/common_defines.h"
 
 namespace common {
 
@@ -27,6 +28,19 @@ TEST(Waiter, TestAll) {
   waiter.Wait();
   EXPECT_TRUE(true);
   thread2.join();
+}
+
+TEST(Waiter, Construct) {
+  std::shared_ptr<Waiter> waiter1(new Waiter());
+  std::shared_ptr<Waiter> waiter2(nullptr, SharedNoDestroy<Waiter>);
+  
+  waiter2 = std::move(waiter1);
+
+  //auto mitem = std::shared_ptr<Waiter>(std::move(waiter).get());
+  //mitem.get();
+  //if (del_p) *del_p = SharedNoDestroy<Waiter>;
+
+  
 }
 
 }  // namespace common

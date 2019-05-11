@@ -13,7 +13,7 @@
 
 namespace leader {
 
-std::atomic<GRPCChannel*>* GrpcChannelGroup::AddChannel(GRPCChannel* channel) {
+std::shared_ptr<GRPCChannel>* GrpcChannelGroup::AddChannel() {
   if (IsFull()) {
     return nullptr;
   }
@@ -24,11 +24,10 @@ std::atomic<GRPCChannel*>* GrpcChannelGroup::AddChannel(GRPCChannel* channel) {
     return nullptr;
   }
   auto& pair = channels_[index];
-  pair.first = channel;
   return &pair.first;
 }
 
-int GrpcChannelGroup::GetIndexOfSlot(std::atomic<GRPCChannel*>* slot) {
+int GrpcChannelGroup::GetIndexOfSlot(std::shared_ptr<GRPCChannel>* slot) {
   for (int i = 0; i < channels_.size(); i++) {
     if (slot == &channels_[i].first) {
       return i;
@@ -41,7 +40,7 @@ GRPCChannel* GrpcChannelGroup::PickChannel() {
   auto index = index_++ % channel_capacity_;
   for (int i = 0; i < channel_capacity_; i++) {
     if (channels_[index].second) {
-      return channels_[index].first;
+      return channels_[index].first.get();
     }
     index = (index + 1) % channel_capacity_;
   }
@@ -50,7 +49,7 @@ GRPCChannel* GrpcChannelGroup::PickChannel() {
 
 void GrpcChannelGroup::MoveChannelToBad(GRPCChannel* channel) {
   for (auto& pair : channels_) {
-    if (channel == pair.first) {
+    if (channel == pair.first.get()) {
       pair.second = false;
     }
   }
@@ -58,7 +57,7 @@ void GrpcChannelGroup::MoveChannelToBad(GRPCChannel* channel) {
 
 void GrpcChannelGroup::MoveChannelToGood(GRPCChannel* channel) {
   for (auto& pair : channels_) {
-    if (channel == pair.first) {
+    if (channel == pair.first.get()) {
       pair.second = true;
     }
   }
@@ -68,7 +67,7 @@ bool GrpcChannelGroup::CheckChannels(int timeout) {
   std::vector<GRPCChannel*> channels;
   for (auto& pair : channels_) {
     if (pair.first != nullptr) {
-      channels.push_back(pair.first.load());
+      channels.push_back(pair.first.get());
     }
   } 
   common::Waiter waiter(channels.size());
@@ -77,6 +76,7 @@ bool GrpcChannelGroup::CheckChannels(int timeout) {
     GrpcCheckerPingCall::Ping(channel_pool_,
                               channel,
                               spec_,
+                              timeout,
                               &waiter,
                               &bad);
   }

@@ -37,4 +37,7 @@
 #define RTP_VERSION_MAJOR 2
 #define RTP_VERSION_MINOR 0
 
+template <typename T>
+void SharedNoDestroy(T* p) { }
+
 #endif  // COMMON_COMMON_DEFINES_H_

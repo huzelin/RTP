@@ -8,6 +8,8 @@
 #include <memory>
 #include <string>
 
+#include "common/common_defines.h"
+#include "common/logging.h"
 #include "common/waiter.h"
 #include "ping.grpc.pb.h"
 #include "leader/grpc/grpc_channel_pool.h"
@@ -25,10 +27,34 @@ using grpc::ClientAsyncResponseReader;
 class GrpcCall {
  public:
   virtual bool AsyncCompleteRpc() = 0;
+  
   static void CompleteRPCLoop();
   static void CompleteQueueShutDown();
 
  protected:
+  template <typename CallType>
+  static void PingImpl(CallType *call,
+                       GRPCChannel* channel,
+                       int timeout) {
+    std::shared_ptr<GRPCChannel> s_channel(
+        channel, SharedNoDestroy<GRPCChannel>);
+    std::unique_ptr<PingService::Stub> stub(
+        PingService::NewStub(s_channel));
+    Request request;
+
+    gpr_timespec timespec;
+    timespec.tv_sec = 0;
+    timespec.tv_nsec = timeout * 1000 * 1000;  // timeout ms.
+    timespec.clock_type = GPR_TIMESPAN;
+    call->context_.set_deadline(timespec);
+
+    call->response_reader_ = stub->PrepareAsyncPing(
+        &call->context_, request, &cq);
+    call->response_reader_->StartCall();
+    call->response_reader_->Finish(
+        &call->reply_, &call->status_, (void*)call);
+  }
+
   Status status_;
   ClientContext context_;
   Reply reply_;
@@ -57,7 +83,8 @@ class GrpcPingCall : public GrpcCall {
 
   static void Ping(GrpcChannelPool* channel_pool,
                    GRPCChannel* channel,
-                   const std::string& spec);
+                   const std::string& spec,
+                   int timeout);
   
  protected:
   GrpcChannelPool *channel_pool_;
@@ -87,6 +114,7 @@ class GrpcCheckerPingCall : public GrpcPingCall {
   static void Ping(GrpcChannelPool* channel_pool,
                    GRPCChannel* channel,
                    const std::string& spec,
+                   int timeout,
                    common::Waiter* waiter,
                    std::atomic<uint32_t>* bad);
  
