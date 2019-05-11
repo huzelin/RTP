@@ -16,10 +16,10 @@ namespace leader {
 
 GrpcServerSubscriber::GrpcServerSubscriber() :
     ServerSubscriber(),
-    channel_pool_(nullptr) {
-  complete_queue_consume_thread_ = std::thread([=]() {
-    GrpcCall::CompleteRPCLoop(); 
-  });
+    channel_pool_(nullptr) { }
+
+GrpcServerSubscriber::~GrpcServerSubscriber() {
+  GrpcCompleteQueueScheduler::Get()->Close();
 }
 
 GRPCChannel* GrpcServerSubscriber::GetChannel(const std::string& path) {
@@ -35,11 +35,6 @@ GRPCChannel* GrpcServerSubscriber::GetChannel(const std::string& path) {
     }
   }
   return nullptr;
-}
-
-void GrpcServerSubscriber::Close() {
-  GrpcCall::CompleteQueueShutDown();
-  complete_queue_consume_thread_.join();
 }
 
 bool GrpcServerSubscriber::SharedInitializer(uint32_t timeout,

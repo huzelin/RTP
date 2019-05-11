@@ -20,7 +20,7 @@ class ServerSubscriber {
  public:
   ServerSubscriber();
 
-  ~ServerSubscriber();
+  virtual ~ServerSubscriber();
 
   ServerSubscriber(const ServerSubscriber&) = delete;
 

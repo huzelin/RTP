@@ -6,24 +6,34 @@
 
 namespace leader {
 
-CompletionQueue GrpcCall::cq; 
+GrpcCompleteQueueScheduler::GrpcCompleteQueueScheduler() {
+  thread_ = std::thread([=]() {
+    CompleteRPCLoop();                   
+  });
+}
 
-void GrpcCall::CompleteRPCLoop() {
+GrpcCompleteQueueScheduler::~GrpcCompleteQueueScheduler() {
+  if (thread_.joinable()) {
+    thread_.join();
+  }
+}
+
+void GrpcCompleteQueueScheduler::CompleteRPCLoop() {
   void* got_tag;
   bool ok = false;
 
   // Block until the next result is available in the
   // completion queue "cq".
-  while (cq.Next(&got_tag, &ok)) {
-    CHECK(ok) << "Verify that the request was completed successfully failed";
+  while (cq_.Next(&got_tag, &ok)) {
+    if (!ok) break;
     GrpcCall* call = static_cast<GrpcCall*>(got_tag);
     call->AsyncCompleteRpc();
     delete call;
   }
 }
 
-void GrpcCall::CompleteQueueShutDown() {
-  cq.Shutdown();
+void GrpcCompleteQueueScheduler::Close() {
+  cq_.Shutdown();
 }
 
 void GrpcPingCall::Ping(GrpcChannelPool* channel_pool,

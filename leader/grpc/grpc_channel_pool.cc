@@ -96,10 +96,8 @@ void GrpcChannelPool::OpenNewChannel(const string& spec,
     return;
   }
 
-  grpc::ChannelArguments channel_arguments;
-  auto channel = grpc::CreateCustomChannel(spec,
-                                           grpc::InsecureChannelCredentials(),
-                                           channel_arguments);
+  //grpc::ChannelArguments channel_arguments;
+  auto channel = grpc::CreateChannel(spec, grpc::InsecureChannelCredentials());
   if (channel == nullptr) {
     LOG(ERROR) << "Open channel failed, spec[" << spec << "].";
     return;
@@ -113,7 +111,7 @@ void GrpcChannelPool::OpenNewChannel(const string& spec,
 
   // do Ping now, we don't care about result.
   // just use this to trigger MoveGood/Bad then set channel state.
-  GrpcPingCall::Ping(this, channel_ptr, spec, timeout_);
+  //GrpcPingCall::Ping(this, channel_ptr, spec, timeout_);
 
   DLOG(INFO) << "Open channel successfully spec:[" << spec << "] channel:" << channel_ptr;
 }

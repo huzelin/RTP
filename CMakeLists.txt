@@ -35,7 +35,14 @@ add_library(rtp_core STATIC ${SOURCE})
 target_link_libraries(rtp_core
     zookeeper
     grpc++
+    grpc++_core_stats
+    grpc++_cronet
+    grpc++_error_details
+    grpc++_reflection
+    grpc++_unsecure
+    grpc
     protobuf
+    libz
     pthread
     rt)
 

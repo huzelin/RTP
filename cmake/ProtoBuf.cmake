@@ -56,8 +56,8 @@ function(protobuf_generate_cpp_py output_dir srcs_var hdrs_var python_var work_p
 	string(REPLACE ${work_path}/ "" o_fil ${abs_fil})
 	string(REPLACE "${fil_we}.proto" "" o_fil_path ${o_fil})
 
-    list(APPEND ${srcs_var} "${o_fil_path}/${fil_we}.pb.cc")
-    list(APPEND ${hdrs_var} "${o_fil_path}/${fil_we}.pb.h")
+    list(APPEND ${srcs_var} "${o_fil_path}/${fil_we}.pb.cc" "${o_fil_path}/${fil_we}.grpc.pb.cc")
+    list(APPEND ${hdrs_var} "${o_fil_path}/${fil_we}.pb.h" "${o_fil_path}/${fil_we}.grpc.pb.h")
     list(APPEND ${python_var} "${o_fil_path}/${fil_we}_pb2.py")
 	
     add_custom_command(

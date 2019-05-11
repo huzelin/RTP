@@ -14,4 +14,9 @@ include_directories(
     ${PROJECT_BINARY_DIR}/proto/
 )
 
-file(GLOB_RECURSE leader_proto_files "leader/proto/*.proto")
+file(GLOB_RECURSE leader_test_source "leader/*_test.cc")
+
+list(REMOVE_ITEM leader_source ${leader_test_source})
+foreach(source ${leader_test_source})
+    rtp_add_test(${source} "tests" rtp_core gtest)
+endforeach()

@@ -25,6 +25,7 @@ class CallData {
     } else if (status_ == PROCESS) {
       new CallData(service_, cq_);
       status_ = FINISH;
+      reply_.set_id(1);
       responder_.Finish(reply_, Status::OK, this);
     } else {
       delete this;
@@ -47,13 +48,18 @@ class CallData {
 GrpcServerRegister::GrpcServerRegister() { }
 
 GrpcServerRegister::~GrpcServerRegister() {
+  if (complete_consume_thread_.joinable()) {
+    server_->Shutdown();
+    cq_->Shutdown();
+    complete_consume_thread_.join();
+  }
 }
 
 bool GrpcServerRegister::Start() {
   auto ret = ServerRegister::Start();
   if (!ret) return ret;
-  
-  std::string spec = ip_ + ":" + std::to_string(port_);
+
+  std::string spec = std::string("0.0.0.0") + ":" + std::to_string(port_);
   ServerBuilder builder;
   builder.AddListeningPort(spec, grpc::InsecureServerCredentials());
   builder.RegisterService(&service_);
@@ -65,19 +71,12 @@ bool GrpcServerRegister::Start() {
     void* got_tag;
     bool ok;
     while (cq_->Next(&got_tag, &ok)) {
-      CHECK(ok) << "Verify that the request was completed successfully failed";
+      if (!ok) break;
       static_cast<CallData*>(got_tag)->Proceed();
     }
+    LOG(INFO) << "ServerRegister complete consume thread exiting";
   });
   return true;
-}
-
-void GrpcServerRegister::Close() {
-  ServerRegister::Close();
-
-  server_->Shutdown();
-  cq_->Shutdown();
-  complete_consume_thread_.join();
 }
 
 }  // namespace leader

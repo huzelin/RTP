@@ -23,8 +23,6 @@ class GrpcServerRegister : public ServerRegister {
 
   virtual bool Start() override;
 
-  virtual void Close() override;
-
  protected:
   PingService::AsyncService service_;
   std::unique_ptr<ServerCompletionQueue> cq_;

@@ -7,9 +7,11 @@
 
 #include <memory>
 #include <string>
+#include <thread>
 
 #include "common/common_defines.h"
 #include "common/logging.h"
+#include "common/singleton.h"
 #include "common/waiter.h"
 #include "ping.grpc.pb.h"
 #include "leader/grpc/grpc_channel_pool.h"
@@ -24,12 +26,25 @@ using grpc::ClientAsyncResponseReader;
 /**
  * @brief Grpc ping call servce
  */
+class GrpcCompleteQueueScheduler :
+    public common::Singleton<GrpcCompleteQueueScheduler> {
+ public:
+  GrpcCompleteQueueScheduler();
+  ~GrpcCompleteQueueScheduler();
+
+  void Close();
+  CompletionQueue& cq() { return cq_; }
+
+ protected:
+  void CompleteRPCLoop();
+
+  CompletionQueue cq_;
+  std::thread thread_;
+};
+
 class GrpcCall {
  public:
   virtual bool AsyncCompleteRpc() = 0;
-  
-  static void CompleteRPCLoop();
-  static void CompleteQueueShutDown();
 
  protected:
   template <typename CallType>
@@ -38,9 +53,9 @@ class GrpcCall {
                        int timeout) {
     std::shared_ptr<GRPCChannel> s_channel(
         channel, SharedNoDestroy<GRPCChannel>);
-    std::unique_ptr<PingService::Stub> stub(
-        PingService::NewStub(s_channel));
+    call->stub_ = std::move(PingService::NewStub(s_channel));
     Request request;
+    request.set_id(1);
 
     gpr_timespec timespec;
     timespec.tv_sec = 0;
@@ -48,19 +63,17 @@ class GrpcCall {
     timespec.clock_type = GPR_TIMESPAN;
     call->context_.set_deadline(timespec);
 
-    call->response_reader_ = stub->PrepareAsyncPing(
-        &call->context_, request, &cq);
+    auto& cq = GrpcCompleteQueueScheduler::Get()->cq();
+    call->response_reader_ = call->stub_->PrepareAsyncPing(&call->context_, request, &cq);
     call->response_reader_->StartCall();
-    call->response_reader_->Finish(
-        &call->reply_, &call->status_, (void*)call);
+    call->response_reader_->Finish(&call->reply_, &call->status_, (void*)call);
   }
 
   Status status_;
   ClientContext context_;
   Reply reply_;
   std::shared_ptr<ClientAsyncResponseReader<Reply>> response_reader_;
-
-  static CompletionQueue cq;
+  std::unique_ptr<PingService::Stub> stub_;
 };
 
 class GrpcPingCall : public GrpcCall {
@@ -78,6 +91,7 @@ class GrpcPingCall : public GrpcCall {
     } else {
       channel_pool_->MoveFromGood2Bad(spec_, channel_);
     }
+    DLOG(INFO) << " status=" << status_.error_message() << " status_code=" << status_.error_code();
     return status_.ok();
   }
 
@@ -108,6 +122,7 @@ class GrpcCheckerPingCall : public GrpcPingCall {
     if (!success) {
       bad_++;
     }
+    waiter_->Notify();
     return success;
   }
 
