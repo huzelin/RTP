@@ -6,12 +6,21 @@
 
 #include "leader/node_collection_impl.h"
 #include "leader/grpc/grpc_bad_node_detector.h"
+#include "leader/grpc/grpc_call.h"
 
 namespace {
 const int GET_CHANNEL_RETRY_TIMES = 3;
 }  // namespace
 
 namespace leader {
+
+GrpcServerSubscriber::GrpcServerSubscriber() :
+    ServerSubscriber(),
+    channel_pool_(nullptr) {
+  complete_queue_consume_thread_ = std::thread([=]() {
+    GrpcCall::CompleteRPCLoop(); 
+  });
+}
 
 GRPCChannel* GrpcServerSubscriber::GetChannel(const std::string& path) {
   std::string msg;
@@ -20,12 +29,17 @@ GRPCChannel* GrpcServerSubscriber::GetChannel(const std::string& path) {
       LOG(ERROR) << "No valid server spec for " << path;
       return nullptr;
     }
-    GRPCChannel* channel = channel_pool_->GetChannel("tcp:" + msg);
+    GRPCChannel* channel = channel_pool_->GetChannel(msg);
     if (channel != nullptr) {
       return channel;
     }
   }
   return nullptr;
+}
+
+void GrpcServerSubscriber::Close() {
+  GrpcCall::CompleteQueueShutDown();
+  complete_queue_consume_thread_.join();
 }
 
 bool GrpcServerSubscriber::SharedInitializer(uint32_t timeout,

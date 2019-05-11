@@ -8,40 +8,10 @@
 #include "common/logging.h"
 #include "common/waiter.h"
 
+#include "leader/grpc/grpc_call.h"
+#include "leader/grpc/grpc_channel_pool.h"
+
 namespace leader {
-
-/*
-class GrpcChannelGroupPingClosure : public RPCClosure {
- public:
-  GrpcChannelGroupPingClosure() = default;
-  ~GrpcChannelGroupPingClosure() override = default;
-
-  void DoAsyncPing(GRPCChannel* channel, WaitGroup* wg, int timeout) {
-    wg_ = wg;
-    wg_->Add();
-    arpc::EasyRpcPing_Stub stub(channel);
-    time_stamp_ = time(NULL);
-    request_.set_id(time_stamp_);
-    ctrl_._timeout = timeout;
-    stub.Query(&ctrl_, &request_, &response_, this);
-  }
-
-  void Run() override {
-    wg_->Done();
-  }
-
-  bool Success() {
-    return response_.id() == time_stamp_ + 1;
-  }
-
- private:
-  arpc::EasyRPCController ctrl_;
-  arpc::EasyRpcPingQuery request_;
-  arpc::EasyRpcPingQuery response_;
-  WaitGroup* wg_;
-  uint64_t time_stamp_;
-};
-*/
 
 std::atomic<GRPCChannel*>* GrpcChannelGroup::AddChannel(GRPCChannel* channel) {
   if (IsFull()) {
@@ -95,26 +65,23 @@ void GrpcChannelGroup::MoveChannelToGood(GRPCChannel* channel) {
 }
 
 bool GrpcChannelGroup::CheckChannels(int timeout) {
-#if 0
-  WaitGroup wg;
-  std::vector<GrpcChannelGroupPingClosure*> closures;
+  std::vector<GRPCChannel*> channels;
   for (auto& pair : channels_) {
-    if (pair.first != nullptr && !pair.second) {
-      // only check bad channel
-      auto closure = new GrpcChannelGroupPingClosure();
-      closures.push_back(closure);
-      closure->DoAsyncPing(pair.first.load(), &wg, timeout);
+    if (pair.first != nullptr) {
+      channels.push_back(pair.first.load());
     }
+  } 
+  common::Waiter waiter(channels.size());
+  std::atomic<uint32_t> bad(0);
+  for (auto& channel : channels) {
+    GrpcCheckerPingCall::Ping(channel_pool_,
+                              channel,
+                              spec_,
+                              &waiter,
+                              &bad);
   }
-  wg.Wait();
-  int badCount = 0;
-  for (auto closure : closures) {
-    badCount += closure->Success() ? 0 : 1;
-    delete closure;
-  }
-  return badCount < channel_capacity_;
-#endif
-  return true;
+  waiter.Wait();
+  return bad.load() < channel_capacity_;
 }
 
 }  // namespace leader

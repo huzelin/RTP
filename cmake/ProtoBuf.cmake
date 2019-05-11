@@ -10,6 +10,7 @@ find_package(Protobuf REQUIRED)
 include_directories(
   ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/include/
 )
+set(grpc_cpp_plugin_path ${PROJECT_SOURCE_DIR}/3rdparty/protobuf/protobuf-3.7.0/bin/grpc_cpp_plugin)
 
 set(PROTOBUF_GENERATE_CPP_APPEND_PATH TRUE)
 ################################################################################################
@@ -65,6 +66,7 @@ function(protobuf_generate_cpp_py output_dir srcs_var hdrs_var python_var work_p
              "${o_fil_path}/${fil_we}_pb2.py"
       COMMAND ${CMAKE_COMMAND} -E make_directory "${output_dir}"
       COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --cpp_out    ${output_dir} ${o_fil} --proto_path ${proto_path} ${_protoc_include}
+      COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --plugin=protoc-gen-grpc=${grpc_cpp_plugin_path} --grpc_out  ${output_dir} ${o_fil} --proto_path ${proto_path} ${_protoc_include}
       COMMAND ${PROTOBUF_PROTOC_EXECUTABLE} --python_out ${output_dir} ${o_fil} --proto_path ${proto_path} ${_protoc_include}
       DEPENDS ${abs_fil}
       WORKING_DIRECTORY ${work_path}

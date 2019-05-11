@@ -12,6 +12,7 @@
 #include <utility>
 
 #include "common/logging.h"
+#include "leader/grpc/grpc_call.h"
 
 using std::map;
 using std::string;
@@ -49,20 +50,8 @@ bool GrpcChannelPool::Init(int32_t work_thread_num,
   if (work_thread_num <= 0) {
     work_thread_num = GetLogicCpuNum();  // cpu_num as default
   }
-#if 0
-  // init channel-manager
-  channel_manager_ = new EasyGRPCChannelManager(nullptr,
-                                               work_thread_num,
-                                               io_thread_num);
-  if (!channel_manager_->Start()) {
-    delete channel_manager_;
-    channel_manager_ = nullptr;
-    LOG(ERROR) << "Failed to start network IO thread.";
-    return false;
-  }
-  // init conn-callback, callback object is managed by channel manager
-  channel_manager_->SetConnCallback(new GrpcChannelPoolConnCallback(this));
-#endif
+
+  // TODO: set connection callback for state
   return true;
 }
 
@@ -75,7 +64,7 @@ GRPCChannel* GrpcChannelPool::GetChannel(const string& spec) {
     channel_lock_.unlock();
   } else {
     channel_lock_.unlock();
-    auto newChannelGroup = new GrpcChannelGroup(channel_count_);
+    auto newChannelGroup = new GrpcChannelGroup(channel_count_, spec, this);
     channel_lock_.wrlock();
     iter = channel_pool_.find(spec);
     if (iter != channel_pool_.end()) {
@@ -108,45 +97,22 @@ void GrpcChannelPool::OpenNewChannel(const string& spec,
     return;
   }
 
-  int cidx = channelGroup->GetIndexOfSlot(slot);
-  if (cidx < 0) {
-    LOG(ERROR) << "Get slot index for " << slot
-               << " failed, this should not happen";
-  }
-
-#if 0
-  // create channel but don't do Ping, so OnConnect will not be called
-  EasyGRPCChannel* channel =
-      channel_manager_->OpenChannel(spec, ERPC_CONN_IDEL_TIME,
-                                    0,  // priority, temporarily useless
-                                    queue_size_,  // queue_size, temporarily useless
-                                    false,
-                                    build_conn_timeout_);
+  auto channel = grpc::CreateChannel(spec, grpc::InsecureChannelCredentials());
   if (channel == nullptr) {
-    // only bad spec can cause this,
-    // so we don't need to handle the empty slot, just leave it there
     LOG(ERROR) << "Open channel failed, spec[" << spec << "].";
     return;
   }
-  // call this interface will set cidx of this channel,
-  // which will force libeasy create new connection for this channel
-  // the 8 bit offset is to prevent cidx affect io thread picking
-  // see implementation of easy_client_dispatch , easy_client_list_find
-  // and easy_connection_do_client for detail
-  channel->SetSingleAddress((cidx + 1) << 8);
-  slot->store(channel);
+  auto channel_ptr = channel.get();
+  slot->store(channel_ptr);
   channel_lock_.wrlock();
-  channel_group_cache_[channel] = channelGroup;
+  channel_group_cache_[channel_ptr] = channelGroup;
   channel_lock_.unlock();
-  // do Ping now, we don't care about the result,
-  // just use this to trigger MoveGood/Bad then set channel state
-  if (!channel->Ping(build_conn_timeout_)) {
-    LOG(ERROR) << "Ping to [" << spec << "] failed";
-  }
-  channel->SetDefaultTimeout(timeout_);
-  DLOG(INFO)
-  << "Open channel successfully spec:[" << spec << "] channel:" << channel;
-#endif
+
+  // do Ping now, we don't care about result.
+  // just use this to trigger MoveGood/Bad then set channel state.
+  GrpcPingCall::Ping(this, channel_ptr, spec);
+
+  DLOG(INFO) << "Open channel successfully spec:[" << spec << "] channel:" << channel_ptr;
 }
 
 uint32_t GrpcChannelPool::GetLogicCpuNum() {

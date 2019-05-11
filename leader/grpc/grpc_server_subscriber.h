@@ -12,7 +12,7 @@ namespace leader {
 
 class GrpcServerSubscriber : public ServerSubscriber {
  public:
-  GrpcServerSubscriber() : ServerSubscriber(), channel_pool_(nullptr) { }
+  GrpcServerSubscriber(); 
 
   /**
    * @brief Get RPC channel from listening path
@@ -20,6 +20,8 @@ class GrpcServerSubscriber : public ServerSubscriber {
    * @return nullptr if no matching channel found
    */
   GRPCChannel* GetChannel(const std::string& path);
+
+  virtual void Close() override;
 
  protected:
   bool SharedInitializer(uint32_t timeout,
@@ -29,6 +31,7 @@ class GrpcServerSubscriber : public ServerSubscriber {
                          size_t channelQueueSize) override;
 
   std::unique_ptr<GrpcChannelPool> channel_pool_;
+  std::thread complete_queue_consume_thread_;
 };
 
 }  // namespace leader

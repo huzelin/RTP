@@ -65,7 +65,7 @@ class ServerSubscriber {
 
   bool Start();
 
-  void Close();
+  virtual void Close();
 
   /**
    * @brief Add zk path to subscribe from

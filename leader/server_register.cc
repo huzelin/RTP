@@ -107,12 +107,6 @@ bool ServerRegister::SharedInitializer(uint32_t port, const std::string& ip) {
     LOG(ERROR) << "Invalid IP[" << ip_.c_str() << "] or Port[" << port_ << "] ";
     return false;
   }
-  // don't support hostname for now
-  //  if (mHost.empty()) {
-  //    if (AutomaticGetHost()) {
-  //      mHeartbeatMsg.set_host(mHost);
-  //    }
-  //  }
   return true;
 }
 

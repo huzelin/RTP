@@ -18,7 +18,7 @@ class ServerRegister {
  public:
   ServerRegister();
 
-  ~ServerRegister();
+  virtual ~ServerRegister();
 
   /**
    * @brief Initializer
@@ -48,11 +48,11 @@ class ServerRegister {
 
   void RemovePath(const std::vector<std::string>& paths, bool blocking = true);
 
-  bool Start();
+  virtual bool Start();
 
-  void Close();
+  virtual void Close();
 
- private:
+ protected:
   ServerRegister(const ServerRegister&);
 
   ServerRegister& operator=(const ServerRegister&);
@@ -61,7 +61,6 @@ class ServerRegister {
 
   bool AutomaticGetIP();
 
- private:
   bool SharedInitializer(uint32_t port,
                          const std::string& ip);
   HeartbeatReporter* heartbeat_reporter_;

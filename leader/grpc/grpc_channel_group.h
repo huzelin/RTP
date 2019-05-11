@@ -15,17 +15,22 @@
 namespace leader {
 
 typedef grpc::Channel GRPCChannel;
+class GrpcChannelPool;
 
 /**
  * @brief Manage channels for the same remote spec
  */
 class GrpcChannelGroup {
  public:
-  explicit GrpcChannelGroup(const uint32_t channelCount)
+  explicit GrpcChannelGroup(const uint32_t channelCount,
+                            const std::string& spec,
+                            GrpcChannelPool* channel_pool)
       : channel_capacity_(channelCount),
         channel_count_(0),
         index_(0),
-        channels_(channelCount) {
+        channels_(channelCount),
+        spec_(spec),
+        channel_pool_(channel_pool) {
     for (auto& pair : channels_) {
       pair.first = nullptr;
       pair.second = false;
@@ -63,6 +68,7 @@ class GrpcChannelGroup {
   bool IsFull() {
     return channel_count_ >= channel_capacity_;
   }
+  const std::string& spec() const { return spec_; }
 
   /**
    * @brief Do blocking parallel ping to all holding channels
@@ -72,6 +78,9 @@ class GrpcChannelGroup {
   bool CheckChannels(int timeout);
 
  private:
+  std::string spec_;
+  GrpcChannelPool *channel_pool_;
+
   const uint32_t channel_capacity_;
   std::atomic<uint32_t> channel_count_;
   std::atomic<uint32_t> index_;

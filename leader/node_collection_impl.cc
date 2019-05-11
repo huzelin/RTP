@@ -192,7 +192,7 @@ void NodeCollectionImpl::FindNodesBySpec(const std::set<std::string>& specLists,
                                          std::map<std::string, std::string>& nodes) {
   common::ScopedReadLock guard(node_lock_);
   for (const auto& msg : nodes_iindex_) {
-    std::string spec = "tcp:" + msg.first;
+    std::string spec = msg.first;
     if (specLists.find(spec) != specLists.end()) {
       nodes[spec] = msg.first;
     }
