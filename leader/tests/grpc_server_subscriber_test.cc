@@ -18,7 +18,7 @@ TEST(GrpcServerSubscriber, Start) {
   while (true) {
     auto channel = grpc_server_subscriber.GetChannel("/model1");
     LOG(INFO) << "channel=" << channel;
-    sleep(1);
+    usleep(1000);
   }
 }
 
