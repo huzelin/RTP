@@ -45,4 +45,4 @@ target_link_libraries(rtp_core
     libz
     pthread
     rt)
-
+add_subdirectory(tools)
