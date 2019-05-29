@@ -15,6 +15,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/3rdparty/
     ${PROJECT_SOURCE_DIR}/3rdparty/zookeeper/zookeeper-3.4.14/include
     ${PROJECT_SOURCE_DIR}/3rdparty/grpc/grpc-1.20.0/include
+    ${PROJECT_SOURCE_DIR}/3rdparty/yaml-cpp/yaml-cpp-0.6.2/include/
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -std=c++11 -fPIC -ftree-vectorize -Wcpp -g")
@@ -42,6 +43,7 @@ target_link_libraries(rtp_core
     grpc++_unsecure
     grpc
     protobuf
+    yaml-cpp
     libz
     pthread
     rt)

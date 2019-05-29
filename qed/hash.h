@@ -10,6 +10,7 @@
 #include <string>
 
 #include "common/murmurhash.h"
+#include "qed/basic.h"
 
 namespace qed {
 
@@ -24,14 +25,14 @@ struct Hash {
 template<>
 struct Hash<std::string, hash_key_t> {
   hash_key_t operator()(const std::string& key) const noexcept{
-    return MurmurHash64A(key.c_str(), key.size());
+    return common::MurmurHash64A(key.c_str(), key.size());
   }
 };
 
 template<>
 struct Hash<qed::cstr, hash_key_t> {
   hash_key_t operator()(const qed::cstr& key) const noexcept{
-    return MurmurHash64A(key.data, key.size);
+    return common::MurmurHash64A(key.data, key.size);
   }
 };
 

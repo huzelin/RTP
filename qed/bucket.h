@@ -1,3 +1,10 @@
+/*
+ * \file bucket.h
+ * \brief The bucket definition
+ */
+#ifndef QED_BUCKECT_H_
+#define QED_BUCKECT_H_
+
 #include <cstdint>
 #include <string>
 #include <type_traits>
