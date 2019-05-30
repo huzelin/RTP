@@ -39,22 +39,4 @@ std::string Options::ComHttpClientFile      = "com.http.client.file";
 
 std::string Options::PluginPath             = "plugin.path";
 
-std::string Options::SvrArpcQueueSize       = "svr.arpc.queue.size";
-
-std::string Options::SvrHsfConfigHost           = "svr.hsf.config.host";
-std::string Options::SvrHsfAppName              = "svr.hsf.app.name";
-std::string Options::SvrHsfWorkerNum            = "svr.hsf.worker.num";
-std::string Options::SvrHsfConnTimeout          = "svr.hsf.conn.timeout";
-std::string Options::SvrHsfResponseTimeout      = "svr.hsf.response.timeout";
-std::string Options::SvrHsfSvrResponseTimeout   = "svr.hsf.svr.response.timeout";
-std::string Options::SvrHsfHsfLogEnable         = "svr.hsf.hsf.log.enable";
-std::string Options::SvrHsfHsfLogLevel          = "svr.hsf.hsf.log.level";
-std::string Options::SvrHsfHsfLogPath           = "svr.hsf.hsf.log.path";
-std::string Options::SvrHsfHsfLogFile           = "svr.hsf.hsf.log.file";
-std::string Options::SvrHsfHsfLogKeepDays       = "svr.hsf.hsf.log.keepdays";
-std::string Options::SvrHsfServiceName          = "svr.hsf.service.name";
-std::string Options::SvrHsfServiceVersion       = "svr.hsf.service.version";
-std::string Options::SvrHsfServiceGroup         = "svr.hsf.service.group";
-std::string Options::SvrHsfMethod               = "svr.hsf.method";
-
 }  // namespace orc

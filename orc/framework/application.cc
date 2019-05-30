@@ -1,3 +1,7 @@
+/*
+ * \file application.cc
+ * \brief The application implementation.
+ */
 #include "orc/framework/application.h"
 
 #include <limits.h>

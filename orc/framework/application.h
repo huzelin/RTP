@@ -1,3 +1,7 @@
+/*!
+ * \file application.h
+ * \brief The application of ORC.
+ */
 #ifndef ORC_FRAMEWORK_APPLICATION_H_
 #define ORC_FRAMEWORK_APPLICATION_H_
 

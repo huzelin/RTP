@@ -41,26 +41,6 @@ struct Options {
   static std::string ComHttpClientFile;
 
   static std::string PluginPath;
-
-  // arpc server config
-  static std::string SvrArpcQueueSize;
-
-  // hsf server config
-  static std::string SvrHsfConfigHost;
-  static std::string SvrHsfAppName;
-  static std::string SvrHsfWorkerNum;
-  static std::string SvrHsfConnTimeout;
-  static std::string SvrHsfResponseTimeout;
-  static std::string SvrHsfSvrResponseTimeout;
-  static std::string SvrHsfHsfLogEnable;
-  static std::string SvrHsfHsfLogLevel;
-  static std::string SvrHsfHsfLogPath;
-  static std::string SvrHsfHsfLogFile;
-  static std::string SvrHsfHsfLogKeepDays;
-  static std::string SvrHsfServiceName;
-  static std::string SvrHsfServiceVersion;
-  static std::string SvrHsfServiceGroup;
-  static std::string SvrHsfMethod;
 };
 
 }  // namespace orc
