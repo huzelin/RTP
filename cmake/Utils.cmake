@@ -400,7 +400,7 @@ endfunction()
 #################################################################################################
 ## Helper for test function
 function(rtp_add_test source_cxx prefix)
-    string(REGEX REPLACE ".*/${prefix}/" "" pname ${source_cxx})
+    string(REGEX REPLACE "/" "_" pname ${source_cxx})
     string(REPLACE ".cc" "" pname ${pname})
     string(REPLACE ".cpp" "" pname ${pname})
     add_executable(${pname} ${source_cxx})
