@@ -240,4 +240,14 @@ bool StringUtils::GetValueFromMap(
   return true;
 }
 
+bool StringUtils::startsWith(const char* str, const char* match) {
+  if (str == nullptr || match == nullptr) return false;
+
+  const char* h = match;
+  for (; *h != '\0' && *str != '\0'; ++h, ++str) {
+    if (*str != *h) return false;
+  }
+  return *h == '\0';
+}
+
 } // namespace common

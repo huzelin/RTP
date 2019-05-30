@@ -16,6 +16,7 @@ namespace common {
 
 class StringUtils {
  public:
+  static bool startsWith(const char* str, const char* match);
   static bool strToInt8(const char* str, int8_t& value);
   static bool strToUInt8(const char* str, uint8_t& value);
   static bool strToInt16(const char* str, int16_t& value);
