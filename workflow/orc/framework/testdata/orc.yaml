@@ -1,0 +1,9 @@
+orc.app.daemon: false
+orc.app.infile: /dev/null
+orc.app.outfile: /tmp/test_orc.txt
+svr.iothread.num: 1
+
+servers:
+  - svr.name: MergerServer
+    svr.port: 55555
+    svr.worker.num: 64

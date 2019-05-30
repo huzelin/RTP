@@ -1,0 +1,5 @@
+workflow mock_wf {
+  while (MockHandler) {
+    Mock1Handler  
+  }
+}

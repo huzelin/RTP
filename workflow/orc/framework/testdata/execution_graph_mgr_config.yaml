@@ -1,0 +1,5 @@
+svr.worker.num: 2
+svr.handler.file: testdata/handler.yaml
+svr.workflow.pool.size: 10
+svr.workflow.file: testdata/workflow.ww
+svr.workflow.pool.mode: pool

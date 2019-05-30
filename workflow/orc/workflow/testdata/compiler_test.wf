@@ -1,0 +1,38 @@
+workflow a_wf {
+  A
+  B
+  C
+}
+
+workflow b_wf {
+  A
+  if (B) {
+    C   
+  }  
+  D
+}
+
+workflow c_wf {
+  A
+  while (B) {
+    C   
+  }   
+  D 
+}
+
+workflow d_wf {
+  A
+  do {
+    B  
+  } while (!C)
+  D
+}
+
+workflow e_wf {
+  if A {
+    B
+    return
+  }
+
+  C
+}
