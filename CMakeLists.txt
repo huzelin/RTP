@@ -12,6 +12,7 @@ include(cmake/ProtoBuf.cmake)
 include_directories(
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}/
+    ${PROJECT_SOURCE_DIR}/workflow/
     ${PROJECT_SOURCE_DIR}/3rdparty/
     ${PROJECT_SOURCE_DIR}/3rdparty/zookeeper/zookeeper-3.4.14/include
     ${PROJECT_SOURCE_DIR}/3rdparty/grpc/grpc-1.20.0/include
@@ -24,6 +25,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -DNDEBUG -std=c++11 -fPIC -ftree-vec
 include(cmake/modules/common.cmake)
 include(cmake/modules/qed.cmake)
 include(cmake/modules/leader.cmake)
+include(cmake/modules/orc.cmake)
 
 add_subdirectory(3rdparty)
 
@@ -31,6 +33,7 @@ list(APPEND SOURCE
     ${common_source}
     ${qed_source}
     ${leader_source}
+    ${orc_source}
 )
 add_library(rtp_core STATIC ${SOURCE})
 target_link_libraries(rtp_core

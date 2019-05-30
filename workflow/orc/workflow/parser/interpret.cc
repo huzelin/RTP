@@ -3,7 +3,6 @@
 #include "orc/workflow/parser/compiler.h"
 #include "orc/workflow/parser/syntax.h"
 
-/*
 int main(int argc, char* argv[]) {
   if (argc < 2) {
     std::cout << argv[0] << " <file.wf>" << std::endl;
@@ -20,4 +19,4 @@ int main(int argc, char* argv[]) {
 
   workflow_syntax_print_node(node);
   return 0;
-}*/
+}
