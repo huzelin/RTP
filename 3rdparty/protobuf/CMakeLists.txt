@@ -1,1 +1,1 @@
-add_subdirectory(protobuf-3.7.0)
+add_subdirectory(protobuf-3.6.0)

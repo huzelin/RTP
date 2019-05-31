@@ -39,7 +39,8 @@ bool PbRpcServer::ServicePublish(const YAML::Node& config) {
 
     service_publisher_.reset(new leader::GrpcServerRegister());
     if (!service_publisher_->Init(zkHost, port)) {
-      ORC_ERROR("leader RegisterServer fail for Server: %s.", name().c_str());
+      ORC_ERROR("leader RegisterServer fail for Server: %s, zkHost=%s path=%s",
+                name().c_str(), zkHost.c_str(), path.c_str());
       return false;
     }
     service_publisher_->Start();
