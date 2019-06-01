@@ -32,19 +32,10 @@ bool PbRpcServer::ServicePublish(const YAML::Node& config) {
       return false;
     }
 
-    // get zkHost and path
-    auto const pos = service_discovery.find_last_of('/');
-    auto path = service_discovery.substr(pos + 1);
-    auto zkHost = service_discovery.substr(0, pos);
-
-    service_publisher_.reset(new leader::BrpcServerRegister());
-    if (!service_publisher_->Init(zkHost, port)) {
-      ORC_ERROR("leader RegisterServer fail for Server: %s, zkHost=%s path=%s",
-                name().c_str(), zkHost.c_str(), path.c_str());
+    if (!InitLeader(service_discovery)) {
+      ORC_ERROR("Init leader on %s failed", service_discovery.c_str());
       return false;
     }
-    service_publisher_->Start();
-    service_publisher_->AddPath(path);
     ORC_INFO("ServicePublish use zk mode.");
   }
 

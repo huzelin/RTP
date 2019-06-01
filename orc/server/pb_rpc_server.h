@@ -52,7 +52,9 @@ class PbRpcServer : public ServerBase {
   bool ServicePublish(const YAML::Node& config) override;
   bool ServiceHide() override;
 
- private:
+ protected:
+  virtual bool InitLeader(const std::string& service_discovery) = 0;
+
   std::unique_ptr<leader::ServerRegister> service_publisher_;
 
   ORC_DISALLOW_COPY_AND_ASSIGN(PbRpcServer);
