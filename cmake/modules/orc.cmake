@@ -14,3 +14,10 @@ target_link_libraries(orc_interpret rtp_core)
 
 add_executable(orc_main "orc/framework/orc_main.cc")
 target_link_libraries(orc_main rtp_core)
+
+# Copy Test Data
+add_custom_target(orc_utest_data ALL DEPENDS)
+add_custom_command(TARGET orc_utest_data
+    POST_BUILD
+    COMMAND cp -r ${CMAKE_SOURCE_DIR}/orc/framework/testdata/ ${CMAKE_BINARY_DIR}/ COMMENT "copy orc utest data"
+    COMMAND cp -r ${CMAKE_SOURCE_DIR}/orc/workflow/testdata/ ${CMAKE_BINARY_DIR}/ COMMENT "copy orc utest data")

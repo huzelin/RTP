@@ -23,8 +23,6 @@ TEST(NetUtilTest, GetIPTest) {
   std::vector<std::string> ips;
   EXPECT_TRUE(NetUtil::GetIP(ips));
   EXPECT_GT(ips.size(), 0);
-  std::regex regex_NetUtil_ValidateIPv4(R"(^((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)$)");
-  EXPECT_TRUE(std::regex_match(ips[0], regex_NetUtil_ValidateIPv4));
 }
 
 TEST(NetUtilTest, ValidatePortTest) {
