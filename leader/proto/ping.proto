@@ -2,15 +2,17 @@ syntax = "proto3";
 
 package leader;
 
+option cc_generic_services = true;
+
 // The Ping service definition.
 service PingService {
-  rpc Ping (Request) returns (Reply) {}
+  rpc Ping (PingRequest) returns (PingResponse) {}
 }
 
-message Request {
+message PingRequest {
   uint32 id = 1;
 }
 
-message Reply {
+message PingResponse {
   uint32 id = 1;
 }

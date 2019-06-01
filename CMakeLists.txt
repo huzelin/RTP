@@ -16,6 +16,7 @@ include_directories(
     ${PROJECT_SOURCE_DIR}/3rdparty/gflags/gflags-v2.2.2/include/
     ${PROJECT_SOURCE_DIR}/3rdparty/zookeeper/zookeeper-3.4.14/include
     ${PROJECT_SOURCE_DIR}/3rdparty/grpc/grpc-1.20.0/include
+    ${PROJECT_SOURCE_DIR}/3rdparty/brpc/brpc-0.9.5/include
     ${PROJECT_SOURCE_DIR}/3rdparty/yaml-cpp/yaml-cpp-0.6.2/include/
 )
 
@@ -38,17 +39,16 @@ list(APPEND SOURCE
 add_library(rtp_core STATIC ${SOURCE})
 target_link_libraries(rtp_core
     zookeeper
-    grpc++
-    grpc++_core_stats
-    grpc++_cronet
-    grpc++_error_details
-    grpc++_reflection
-    grpc++_unsecure
-    grpc
+    brpc
+    openssl
+    crypto
+    leveldb
     protobuf
     gflags
     yaml-cpp
     libz
     pthread
-    rt)
+    rt
+    dl
+    )
 add_subdirectory(tools)

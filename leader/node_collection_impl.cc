@@ -210,11 +210,13 @@ bool NodeCollectionImpl::PickOneNode(std::string& node,
   common::ScopedReadLock rrmGuard(round_robin_map_lock_);
   auto rri = round_robin_index_map_.find(path);
   if (rri == round_robin_index_map_.end()) {
+    LOG(ERROR) << "Path: " << path << " not added";
     return false;
   }
   common::ScopedReadLock guard(node_lock_);
   auto iValid = valid_nodes_.find(path);
   if (iValid == valid_nodes_.end() || iValid->second->empty()) {
+    LOG(ERROR) << "Path: " << path << " iValid is empty";
     return false;
   }
   node = iValid->second->at(rri->second->next(iValid->second->size()));

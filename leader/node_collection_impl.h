@@ -70,7 +70,7 @@ class NodeCollectionImpl : public NodeCollectionInterface {
     size_t index_;
   };
   // only implement round robin lb for now
-  std::map<std::string, RoundRobinIndex*> round_robin_index_map_;
+  mutable std::map<std::string, RoundRobinIndex*> round_robin_index_map_;
   common::ReadWriteLock round_robin_map_lock_;
 };
 

@@ -10,7 +10,7 @@
 #include "orc/framework/configure.h"
 #include "orc/util/log.h"
 
-#include "leader/grpc/grpc_server_register.h"
+#include "leader/brpc/brpc_server_register.h"
 
 namespace orc {
 
@@ -37,7 +37,7 @@ bool PbRpcServer::ServicePublish(const YAML::Node& config) {
     auto path = service_discovery.substr(pos + 1);
     auto zkHost = service_discovery.substr(0, pos);
 
-    service_publisher_.reset(new leader::GrpcServerRegister());
+    service_publisher_.reset(new leader::BrpcServerRegister());
     if (!service_publisher_->Init(zkHost, port)) {
       ORC_ERROR("leader RegisterServer fail for Server: %s, zkHost=%s path=%s",
                 name().c_str(), zkHost.c_str(), path.c_str());

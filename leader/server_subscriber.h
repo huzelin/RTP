@@ -32,17 +32,15 @@ class ServerSubscriber {
    * @param timeout rpc timeout
    * @param workThreadNum rpc worker thread number, default as cpu number
    * @param ioThreadNum rpc io thread number, default as cpu number
-   * @param channelQueueSize
    * @param hbInterval
    * @return
    */
   bool Init(const std::string& host,
             uint32_t timeout = 5000,
-            int32_t workThreadNum = -1,
-            int32_t ioThreadNum = 0,
             uint32_t channelCount = 1,
-            size_t channelQueueSize = 64,
-            uint32_t hbInterval = 5);
+            uint32_t hbInterval = 5,
+            int32_t workThreadNum = -1,
+            int32_t ioThreadNum = 0);
 
   /**
    * @brief Initialize
@@ -51,17 +49,15 @@ class ServerSubscriber {
    * @param timeout rpc timeout
    * @param work_thread_num rpc worker thread number, default as cpu number
    * @param io_thread_num rpc io thread number, default as cpu number
-   * @param channelQueueSize
    * @param hbInterval
    * @return
    */
   bool Init(ZKWrapper* zk,
             uint32_t timeout = 5000,
-            int32_t work_thread_num = -1,
-            int32_t io_thread_num = 0,
             uint32_t channel_count = 1,
-            size_t channelQueueSize = 64,
-            uint32_t hbInterval = 5);
+            uint32_t hbInterval = 5,
+            int32_t work_thread_num = -1,
+            int32_t io_thread_num = 0);
 
   bool Start();
 
@@ -102,8 +98,7 @@ class ServerSubscriber {
   virtual bool SharedInitializer(uint32_t timeout,
                                  int32_t work_thread_num,
                                  int32_t io_thread_num,
-                                 uint32_t channel_count,
-                                 size_t channelQueueSize) = 0;
+                                 uint32_t channel_count) = 0;
 
   std::unique_ptr<NodeCollectionImpl> node_collection_;
   std::unique_ptr<BadNodeDetector> bad_node_detector_;

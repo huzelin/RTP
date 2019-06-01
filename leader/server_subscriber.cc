@@ -41,31 +41,27 @@ void ServerSubscriber::Close() {
 
 bool ServerSubscriber::Init(const std::string& host,
                             uint32_t timeout,
-                            int32_t workThreadNum,
-                            int32_t ioThreadNum,
                             uint32_t channelCount,
-                            size_t channelQueueSize,
-                            uint32_t hbInterval) {
+                            uint32_t hbInterval,
+                            int32_t workThreadNum,
+                            int32_t ioThreadNum) {
   return SharedInitializer(timeout,
                            workThreadNum,
                            ioThreadNum,
-                           channelCount,
-                           channelQueueSize)
+                           channelCount)
       && heartbeat_receiver_->Init(host, node_collection_.get(), hbInterval);
 }
 
 bool ServerSubscriber::Init(ZKWrapper* zk,
                             uint32_t timeout,
-                            int32_t workThreadNum,
-                            int32_t ioThreadNum,
                             uint32_t channelCount,
-                            size_t channelQueueSize,
-                            uint32_t hbInterval) {
+                            uint32_t hbInterval,
+                            int32_t workThreadNum,
+                            int32_t ioThreadNum) {
   return SharedInitializer(timeout,
                            workThreadNum,
                            ioThreadNum,
-                           channelCount,
-                           channelQueueSize)
+                           channelCount)
       && heartbeat_receiver_->Init(zk, node_collection_.get(), hbInterval);
 }
 

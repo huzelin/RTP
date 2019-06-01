@@ -20,3 +20,8 @@ list(REMOVE_ITEM leader_source ${leader_test_source})
 foreach(source ${leader_test_source})
     rtp_add_test(${source} "tests" rtp_core gtest)
 endforeach()
+
+file(GLOB_RECURSE leader_example_source "leader/*_example.cc")
+foreach(source ${leader_example_source})
+    rtp_add_example(${source} rtp_core gtest)
+endforeach()

@@ -408,3 +408,11 @@ function(rtp_add_test source_cxx prefix)
     add_test(${pname} ${pname} COMMAND ${pname})
 endfunction()
 
+function(rtp_add_example source_cxx)
+    string(REGEX REPLACE "/" "_" pname ${source_cxx})
+    string(REPLACE ".cc" "" pname ${pname})
+    string(REPLACE ".cpp" "" pname ${pname})
+    add_executable(${pname} ${source_cxx})
+    target_link_libraries(${pname} ${ARGN})
+endfunction()
+
