@@ -1,0 +1,15 @@
+orc.app.daemon: true
+orc.app.outfile: /dev/null
+orc.app.errfile: /dev/null
+
+servers:
+ - svr.name: HelloServer
+   svr.port: 33333
+   svr.session.pool.size: 500
+   svr.service.discovery: local
+   svr.workflow.pool.mode: singleton
+   svr.workflow.file: /tmp/workflow.conf
+   svr.handler.file: /tmp/handler.yaml
+   svr.session.factory: HelloSessionFactory
+   svr.workflow.router: HelloWorkflowRouter 
+

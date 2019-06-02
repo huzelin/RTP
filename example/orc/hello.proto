@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package orc.example.hello;
+
+option cc_generic_services = true;
+
+message Request {
+  optional bytes name = 1;
+}
+
+message Response {
+  optional bytes content = 1;
+}
+
+service HelloService {
+  rpc hello(Request) returns (Response) { }
+}
