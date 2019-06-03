@@ -68,9 +68,10 @@ bool BrpcChannelGroup::CheckChannels(int timeout) {
   std::vector<BRPCChannel*> channels;
   for (auto& pair : channels_) {
     if (pair.first != nullptr && !pair.second) {
+      // only check bad channel
       channels.push_back(pair.first.get());
     }
-  } 
+  }
   common::Waiter waiter(channels.size());
   std::atomic<uint32_t> bad(0);
   for (auto& channel : channels) {

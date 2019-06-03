@@ -60,6 +60,8 @@ class BrpcPingCall {
       status_ = true;
     } else {
       channel_pool_->MoveFromGood2Bad(spec_, channel_);
+      LOG(ERROR) << "Ping ErrorText:" << cntl->ErrorText()
+          << " ErrorCode:" << cntl->ErrorCode();
     }
   }
 
