@@ -12,7 +12,7 @@ namespace leader {
 
 TEST(BrpcServerSubscriber, Start) {
   BrpcServerSubscriber brpc_server_subscriber;
-  brpc_server_subscriber.Init("10.45.148.167:2181");
+  brpc_server_subscriber.Init("101.201.148.9:2181");
   brpc_server_subscriber.Start();
   brpc_server_subscriber.AddPath("/model1");
   while (true) {

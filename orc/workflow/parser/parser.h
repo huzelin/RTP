@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED
-# define YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED
+#ifndef YY_YY_PARSER_H_INCLUDED
+# define YY_YY_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -60,11 +60,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 17 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1909  */
+#line 14 "workflow.y" /* yacc.c:1909  */
 
   struct workflow_syntax* node;  
 
-#line 68 "/home/wenqi.gwq/newrtp_local/build/parser.h" /* yacc.c:1909  */
+#line 68 "parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -77,4 +77,4 @@ extern YYSTYPE yylval;
 
 int yyparse (struct workflow_syntax* root_node);
 
-#endif /* !YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_H_INCLUDED  */

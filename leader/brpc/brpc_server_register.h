@@ -11,8 +11,6 @@
 #include "leader/server_register.h"
 #include "ping.pb.h"
 
-using brpc::Server;
-
 namespace leader {
 
 class PingServiceImpl : public PingService {
@@ -28,13 +26,15 @@ class BrpcServerRegister : public ServerRegister {
   BrpcServerRegister();
   virtual ~BrpcServerRegister();
 
+  bool AddPingService(brpc::Server* server);
+
   virtual bool Start() override;
   virtual void Close() override;
 
  protected:
   PingServiceImpl service_;
-  std::unique_ptr<Server> server_;
-  std::thread complete_consume_thread_;
+  std::unique_ptr<brpc::Server> server_;
+  bool ping_service_added_;
 };
 
 }  // namespace leader

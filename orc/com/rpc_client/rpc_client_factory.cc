@@ -44,7 +44,7 @@ bool RpcClientFactory::LoadConfigFile(const std::string& file) {
     auto name = it->first.as<std::string>();
     auto type = it->second.as<std::string>();
 
-    ORC_DEBUG("Init service: %s, type: %s.", name.c_str(), type.c_str());
+    ORC_INFO("Init service: %s, type: %s.", name.c_str(), type.c_str());
 
     if (!CreateRpcClient(config, name, type)) {
       ORC_ERROR("Init service: %s fail.", name.c_str());
@@ -76,8 +76,7 @@ bool RpcClientFactory::AddRpcClient(const YAML::Node& config,
   std::unique_ptr<RpcClient> client;
 
   if (strncasecmp(type.c_str(), "brpc", sizeof("brpc")-1) == 0) {
-    //TODO: Add mode codes.
-    //client.reset(new BrpcClient(name, id));
+    client.reset(new BrpcClient(name, id));
   } else {
     ORC_ERROR("Unknown service type: %s for service: %s",
               type.c_str(), name.c_str());

@@ -46,7 +46,6 @@ class RpcClient {
   Type type_;
   int32_t id_;
   
-  std::string leader_zk_host_;
   std::string leader_server_path_;
   uint32_t leader_channel_count_;
   uint32_t leader_request_timeout_ms_;

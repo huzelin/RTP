@@ -1,6 +1,7 @@
 #include "orc/com/rpc_client/rpc_client.h"
 
 #include <sys/time.h>
+#include <unistd.h>
 
 #include "orc/util/log.h"
 #include "orc/util/utils.h"
@@ -17,7 +18,6 @@ RpcClient::RpcClient(const std::string& name, Type type, int32_t id = 0)
 RpcClient::~RpcClient() {}
 
 bool RpcClient::Init(const YAML::Node& config) {
-  CONFIG_OR_FAIL(config, "leader_zk_host", leader_zk_host_);
   CONFIG_OR_FAIL(config, "leader_server_path", leader_server_path_);
   CONFIG_OR_FAIL(config, "leader_request_timeout", leader_request_timeout_ms_);
   CONFIG_OR_FAIL(config, "leader_channel_count", leader_channel_count_);
@@ -149,6 +149,7 @@ void RpcClient::CallMethod(const google::protobuf::MethodDescriptor* method,
 }
 
 void RpcClient::WarmUpChannel() {
+  sleep(1);
   for (int32_t i = 0; i < 500; ++i) {
     GetChannel();
   }

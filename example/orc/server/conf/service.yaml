@@ -1,12 +1,12 @@
 orc.app.daemon: true
-orc.app.outfile: /dev/null
-orc.app.errfile: /dev/null
+orc.app.outfile: /tmp/server.log
+orc.app.errfile: /tmp/server.log
 
 servers:
  - svr.name: HelloServer
-   svr.port: 33333
+   svr.port: 8198
    svr.session.pool.size: 500
-   svr.service.discovery: local
+   svr.service.discovery: 101.201.148.9:2181/model1
    svr.workflow.pool.mode: singleton
    svr.workflow.file: /tmp/workflow.conf
    svr.handler.file: /tmp/handler.yaml

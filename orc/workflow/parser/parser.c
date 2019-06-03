@@ -62,7 +62,7 @@
 
 
 /* Copy the first part of user declarations.  */
-#line 4 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:339  */
+#line 1 "workflow.y" /* yacc.c:339  */
 
 #include "orc/workflow/parser/syntax.h"
 #include "orc/workflow/parser/compiler.h"
@@ -73,7 +73,7 @@ int yylex();
 void yyerror(struct workflow_syntax* root_node, const char* s);
 
 
-#line 77 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:339  */
+#line 77 "parser.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -93,8 +93,8 @@ void yyerror(struct workflow_syntax* root_node, const char* s);
 
 /* In a future release of Bison, this section will be replaced
    by #include "parser.h".  */
-#ifndef YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED
-# define YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED
+#ifndef YY_YY_PARSER_H_INCLUDED
+# define YY_YY_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -123,11 +123,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 17 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:355  */
+#line 14 "workflow.y" /* yacc.c:355  */
 
   struct workflow_syntax* node;  
 
-#line 131 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:355  */
+#line 131 "parser.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -140,11 +140,11 @@ extern YYSTYPE yylval;
 
 int yyparse (struct workflow_syntax* root_node);
 
-#endif /* !YY_YY_HOME_WENQI_GWQ_NEWRTP_LOCAL_BUILD_PARSER_H_INCLUDED  */
+#endif /* !YY_YY_PARSER_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 148 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:358  */
+#line 148 "parser.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -442,9 +442,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    31,    31,    32,    35,    40,    43,    44,    47,    48,
-      49,    50,    51,    54,    59,    60,    61,    63,    68,    73,
-      75,    76,    77
+       0,    28,    28,    29,    32,    37,    40,    41,    44,    45,
+      46,    47,    48,    51,    56,    57,    58,    60,    65,    70,
+      72,    73,    74
 };
 #endif
 
@@ -1236,105 +1236,105 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 31 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 28 "workflow.y" /* yacc.c:1646  */
     {}
-#line 1242 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1242 "parser.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 32 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 29 "workflow.y" /* yacc.c:1646  */
     { workflow_syntax_add_stmt(root_node, (yyvsp[0].node)); }
-#line 1248 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1248 "parser.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 35 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 32 "workflow.y" /* yacc.c:1646  */
     {
           (yyval.node) = workflow_syntax_new_workflow((yyvsp[-1].node), (yyvsp[0].node)); 
         }
-#line 1256 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1256 "parser.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 40 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 37 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[-1].node); }
-#line 1262 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1262 "parser.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 43 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 40 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = workflow_syntax_new_stmt_list(); }
-#line 1268 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1268 "parser.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 44 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 41 "workflow.y" /* yacc.c:1646  */
     { workflow_syntax_add_stmt((yyvsp[-1].node), (yyvsp[0].node)); (yyval.node) = (yyvsp[-1].node); }
-#line 1274 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1274 "parser.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 54 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 51 "workflow.y" /* yacc.c:1646  */
     {
         (yyval.node) = workflow_syntax_new_if_stmt((yyvsp[-2].node), (yyvsp[-1].node), (yyvsp[0].node)); 
       }
-#line 1282 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1282 "parser.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 59 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 56 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = workflow_syntax_new_empty_stmt(); }
-#line 1288 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1288 "parser.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 60 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 57 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[0].node); }
-#line 1294 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1294 "parser.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 61 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 58 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[0].node); }
-#line 1300 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1300 "parser.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 63 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 60 "workflow.y" /* yacc.c:1646  */
     {
             (yyval.node) = workflow_syntax_new_while_stmt((yyvsp[-1].node), (yyvsp[0].node));
          }
-#line 1308 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1308 "parser.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 68 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 65 "workflow.y" /* yacc.c:1646  */
     {
               (yyval.node) = workflow_syntax_new_dowhile_stmt((yyvsp[-2].node), (yyvsp[0].node));
            }
-#line 1316 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1316 "parser.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 73 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 70 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = workflow_syntax_new_return_stmt(); }
-#line 1322 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1322 "parser.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 75 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 72 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = workflow_syntax_new_unop_exp(WORKFLOW_SYNTAX_OPKIND_NOT, (yyvsp[0].node)); }
-#line 1328 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1328 "parser.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 76 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1646  */
+#line 73 "workflow.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[-1].node); }
-#line 1334 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1334 "parser.c" /* yacc.c:1646  */
     break;
 
 
-#line 1338 "/home/wenqi.gwq/newrtp_local/build/parser.c" /* yacc.c:1646  */
+#line 1338 "parser.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1562,7 +1562,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 80 "/home/wenqi.gwq/newrtp_local/orc/workflow/parser/workflow.y" /* yacc.c:1906  */
+#line 77 "workflow.y" /* yacc.c:1906  */
 
 
 void yyerror(struct workflow_syntax* root_node, const char* s) {

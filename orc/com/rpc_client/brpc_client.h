@@ -26,6 +26,7 @@ class BrpcClient : public RpcClient {
 
  private:
   std::unique_ptr<leader::BrpcServerSubscriber> brpc_server_subscriber_;
+  std::string path_;
 
  private:
   ORC_DISALLOW_COPY_AND_ASSIGN(BrpcClient);

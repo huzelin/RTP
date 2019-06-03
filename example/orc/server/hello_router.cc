@@ -11,7 +11,7 @@ class HelloWorkflowRouter : public WorkflowRouter {
   virtual ~HelloWorkflowRouter() = default;
 
   bool Init(const YAML::Node& config) override { return true; }
-  std::string Route(SessionBase* session) override { return "hello"; }
+  std::string Route(SessionBase* session) override { return "default"; }
 };
 
 ORC_REGISTER_WORKFLOW_ROUTER(HelloWorkflowRouter);

@@ -1,0 +1,14 @@
+service_name:
+    HelloServer : brpc
+
+HelloServer:
+  - leader_server_path: 101.201.148.9:2181/model1 
+    leader_request_timeout: 20 # ms
+    leader_channel_count: 1
+    leader_hb_interval: 3 # s
+
+  - leader_server_path: 101.201.148.9:2181/model1
+    leader_request_timeout: 20 # ms
+    leader_channel_count: 1
+    leader_hb_interval: 3
+

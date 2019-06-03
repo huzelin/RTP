@@ -1,6 +1,6 @@
-#line 2 "build/lexer.c"
+#line 2 "lexer.c"
 
-#line 4 "build/lexer.c"
+#line 4 "lexer.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -489,13 +489,11 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
-/* All rights reserved.
- */
-#line 7 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 1 "workflow.l"
+#line 4 "workflow.l"
 #include "orc/workflow/parser/syntax.h"  
 #include "orc/workflow/parser/parser.h"  
-#line 500 "/home/app/newrtp_local/build/lexer.c"
+#line 497 "lexer.c"
 
 #define INITIAL 0
 
@@ -677,10 +675,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 11 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 8 "workflow.l"
 
 
-#line 685 "/home/app/newrtp_local/build/lexer.c"
+#line 682 "lexer.c"
 
 	if ( !(yy_init) )
 		{
@@ -754,7 +752,7 @@ yy_find_action:
 
 		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
 			{
-			int yyl;
+			yy_size_t yyl;
 			for ( yyl = 0; yyl < yyleng; ++yyl )
 				if ( yytext[yyl] == '\n' )
 					   
@@ -775,56 +773,56 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 10 "workflow.l"
 { return IF; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 11 "workflow.l"
 { return ELSE; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 12 "workflow.l"
 { return DO; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 13 "workflow.l"
 { return WHILE; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 14 "workflow.l"
 { return WORKFLOW; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 18 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 15 "workflow.l"
 { return RETURN; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 20 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 17 "workflow.l"
 { yylval.node = workflow_syntax_new_name_stmt(yytext); return NAME; }
 	YY_BREAK
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 22 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 19 "workflow.l"
 /* ignore space */
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 24 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 21 "workflow.l"
 { return *yytext; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 26 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 23 "workflow.l"
 YY_FATAL_ERROR( "flex scanner jammed" );
 	YY_BREAK
-#line 829 "/home/app/newrtp_local/build/lexer.c"
+#line 826 "lexer.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1597,7 +1595,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len 
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
@@ -1830,7 +1828,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 26 "/home/app/newrtp_local/orc/workflow/parser/workflow.l"
+#line 23 "workflow.l"
 
 
 

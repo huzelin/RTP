@@ -18,6 +18,13 @@ bool BrpcServer::StartServer(const YAML::Node& config) {
     ORC_ERROR("Failed to add service");
     return false;
   }
+  auto brpc_server_register = new leader::BrpcServerRegister();
+  if (!brpc_server_register->AddPingService(server_.get())) {
+    ORC_ERROR("Failed AddPingService");
+    return false;
+  }
+  service_publisher_.reset(brpc_server_register);
+ 
   if (!GetOrcConfig(config, Options::SvrPort, &port_)) {
     ORC_ERROR("Can't get option: %s for Server: %s",
               Options::SvrPort.c_str(), name().c_str());
@@ -47,10 +54,9 @@ bool BrpcServer::StopServer() {
 bool BrpcServer::InitLeader(const std::string& service_discovery) {
   // get zkHost and path
   auto const pos = service_discovery.find_last_of('/');
-  auto path = service_discovery.substr(pos + 1);
+  auto path = service_discovery.substr(pos);
   auto zkHost = service_discovery.substr(0, pos);
-
-  service_publisher_.reset(new leader::BrpcServerRegister());
+  
   if (!service_publisher_->Init(zkHost, port_)) {
     ORC_ERROR("leader RegisterServer fail for Server: %s, zkHost=%s path=%s",
               name().c_str(), zkHost.c_str(), path.c_str());

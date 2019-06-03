@@ -14,15 +14,26 @@ void PingServiceImpl::Ping(google::protobuf::RpcController* controller,
   reponse->set_id(request->id());
 }
 
-BrpcServerRegister::BrpcServerRegister() { }
+BrpcServerRegister::BrpcServerRegister() : ping_service_added_(false) { }
 
 BrpcServerRegister::~BrpcServerRegister() { }
+
+bool BrpcServerRegister::AddPingService(brpc::Server* server) {
+  if (server->AddService(&service_, brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
+    LOG(FATAL) << "Failed to start PingServer";
+    return false;
+  }
+  ping_service_added_ = true;
+  return true;
+}
 
 bool BrpcServerRegister::Start() {
   auto ret = ServerRegister::Start();
   if (!ret) return ret;
 
-  server_.reset(new Server());
+  if (ping_service_added_) return true;
+
+  server_.reset(new brpc::Server());
   if (server_->AddService(&service_, brpc::SERVER_DOESNT_OWN_SERVICE) != 0) {
     LOG(FATAL) << "Faied to add PingService";
     return false;

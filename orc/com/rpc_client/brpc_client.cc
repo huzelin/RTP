@@ -17,19 +17,26 @@ bool BrpcClient::Init(const YAML::Node& config) {
   }
 
   brpc_server_subscriber_.reset(new leader::BrpcServerSubscriber());
-  if (!brpc_server_subscriber_->Init(leader_zk_host_,
+
+  auto const pos = leader_server_path_.find_last_of('/');
+  path_ = leader_server_path_.substr(pos);
+  auto zkHost = leader_server_path_.substr(0, pos);
+
+  if (!brpc_server_subscriber_->Init(zkHost,
                                      leader_request_timeout_ms_,
                                      leader_channel_count_,
                                      leader_hb_interval_s_)) {
     ORC_ERROR("BrpcServerSubscriber Init fail.");
     return false;
   }
-  brpc_server_subscriber_->AddPath(leader_server_path_);
+  brpc_server_subscriber_->Start();
+  brpc_server_subscriber_->AddPath(path_);
+  ORC_INFO("brpc subscriber: %s %s inited", zkHost.c_str(), path_.c_str());
   return true;
 }
 
 google::protobuf::RpcChannel* BrpcClient::GetChannel() {
-  return brpc_server_subscriber_->GetChannel(leader_server_path_);
+  return brpc_server_subscriber_->GetChannel(path_);
 }
 
 void BrpcClient::FreeChannel(google::protobuf::RpcChannel* channel) {

@@ -1,0 +1,441 @@
+语法
+
+    0 $accept: workflowlist $end
+
+    1 workflowlist: %empty
+    2             | workflowlist workflow
+
+    3 workflow: WORKFLOW NAME block
+
+    4 block: '{' stmtlist '}'
+
+    5 stmtlist: %empty
+    6         | stmtlist stmt
+
+    7 stmt: ifstmt
+    8     | whilestmt
+    9     | dowhilestmt
+   10     | returnstmt
+   11     | exp
+
+   12 ifstmt: IF exp block elsestmt
+
+   13 elsestmt: %empty
+   14         | ELSE block
+   15         | ELSE ifstmt
+
+   16 whilestmt: WHILE exp block
+
+   17 dowhilestmt: DO block WHILE exp
+
+   18 returnstmt: RETURN
+
+   19 exp: '!' exp
+   20    | '(' exp ')'
+   21    | NAME
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 19
+'(' (40) 20
+')' (41) 20
+'{' (123) 4
+'}' (125) 4
+error (256)
+NAME (258) 3 21
+IF (259) 12
+ELSE (260) 14 15
+DO (261) 17
+WHILE (262) 16 17
+WORKFLOW (263) 3
+RETURN (264) 18
+
+
+Nonterminals, with rules where they appear
+
+$accept (15)
+    on left: 0
+workflowlist (16)
+    on left: 1 2, on right: 0 2
+workflow (17)
+    on left: 3, on right: 2
+block (18)
+    on left: 4, on right: 3 12 14 16 17
+stmtlist (19)
+    on left: 5 6, on right: 4 6
+stmt (20)
+    on left: 7 8 9 10 11, on right: 6
+ifstmt (21)
+    on left: 12, on right: 7 15
+elsestmt (22)
+    on left: 13 14 15, on right: 12
+whilestmt (23)
+    on left: 16, on right: 8
+dowhilestmt (24)
+    on left: 17, on right: 9
+returnstmt (25)
+    on left: 18, on right: 10
+exp (26)
+    on left: 19 20 21, on right: 11 12 16 17 19 20
+
+
+State 0
+
+    0 $accept: . workflowlist $end
+    1 workflowlist: . %empty
+    2             | . workflowlist workflow
+
+    $default  reduce using rule 1 (workflowlist)
+
+    workflowlist  转到状态 1
+
+
+State 1
+
+    0 $accept: workflowlist . $end
+    2 workflowlist: workflowlist . workflow
+    3 workflow: . WORKFLOW NAME block
+
+    $end      shift, and go to state 2
+    WORKFLOW  shift, and go to state 3
+
+    workflow  转到状态 4
+
+
+State 2
+
+    0 $accept: workflowlist $end .
+
+    $default  接受
+
+
+State 3
+
+    3 workflow: WORKFLOW . NAME block
+
+    NAME  shift, and go to state 5
+
+
+State 4
+
+    2 workflowlist: workflowlist workflow .
+
+    $default  reduce using rule 2 (workflowlist)
+
+
+State 5
+
+    3 workflow: WORKFLOW NAME . block
+    4 block: . '{' stmtlist '}'
+
+    '{'  shift, and go to state 6
+
+    block  转到状态 7
+
+
+State 6
+
+    4 block: '{' . stmtlist '}'
+    5 stmtlist: . %empty
+    6         | . stmtlist stmt
+
+    $default  reduce using rule 5 (stmtlist)
+
+    stmtlist  转到状态 8
+
+
+State 7
+
+    3 workflow: WORKFLOW NAME block .
+
+    $default  reduce using rule 3 (workflow)
+
+
+State 8
+
+    4 block: '{' stmtlist . '}'
+    6 stmtlist: stmtlist . stmt
+    7 stmt: . ifstmt
+    8     | . whilestmt
+    9     | . dowhilestmt
+   10     | . returnstmt
+   11     | . exp
+   12 ifstmt: . IF exp block elsestmt
+   16 whilestmt: . WHILE exp block
+   17 dowhilestmt: . DO block WHILE exp
+   18 returnstmt: . RETURN
+   19 exp: . '!' exp
+   20    | . '(' exp ')'
+   21    | . NAME
+
+    NAME    shift, and go to state 9
+    IF      shift, and go to state 10
+    DO      shift, and go to state 11
+    WHILE   shift, and go to state 12
+    RETURN  shift, and go to state 13
+    '}'     shift, and go to state 14
+    '!'     shift, and go to state 15
+    '('     shift, and go to state 16
+
+    stmt         转到状态 17
+    ifstmt       转到状态 18
+    whilestmt    转到状态 19
+    dowhilestmt  转到状态 20
+    returnstmt   转到状态 21
+    exp          转到状态 22
+
+
+State 9
+
+   21 exp: NAME .
+
+    $default  reduce using rule 21 (exp)
+
+
+State 10
+
+   12 ifstmt: IF . exp block elsestmt
+   19 exp: . '!' exp
+   20    | . '(' exp ')'
+   21    | . NAME
+
+    NAME  shift, and go to state 9
+    '!'   shift, and go to state 15
+    '('   shift, and go to state 16
+
+    exp  转到状态 23
+
+
+State 11
+
+    4 block: . '{' stmtlist '}'
+   17 dowhilestmt: DO . block WHILE exp
+
+    '{'  shift, and go to state 6
+
+    block  转到状态 24
+
+
+State 12
+
+   16 whilestmt: WHILE . exp block
+   19 exp: . '!' exp
+   20    | . '(' exp ')'
+   21    | . NAME
+
+    NAME  shift, and go to state 9
+    '!'   shift, and go to state 15
+    '('   shift, and go to state 16
+
+    exp  转到状态 25
+
+
+State 13
+
+   18 returnstmt: RETURN .
+
+    $default  reduce using rule 18 (returnstmt)
+
+
+State 14
+
+    4 block: '{' stmtlist '}' .
+
+    $default  reduce using rule 4 (block)
+
+
+State 15
+
+   19 exp: . '!' exp
+   19    | '!' . exp
+   20    | . '(' exp ')'
+   21    | . NAME
+
+    NAME  shift, and go to state 9
+    '!'   shift, and go to state 15
+    '('   shift, and go to state 16
+
+    exp  转到状态 26
+
+
+State 16
+
+   19 exp: . '!' exp
+   20    | . '(' exp ')'
+   20    | '(' . exp ')'
+   21    | . NAME
+
+    NAME  shift, and go to state 9
+    '!'   shift, and go to state 15
+    '('   shift, and go to state 16
+
+    exp  转到状态 27
+
+
+State 17
+
+    6 stmtlist: stmtlist stmt .
+
+    $default  reduce using rule 6 (stmtlist)
+
+
+State 18
+
+    7 stmt: ifstmt .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 19
+
+    8 stmt: whilestmt .
+
+    $default  reduce using rule 8 (stmt)
+
+
+State 20
+
+    9 stmt: dowhilestmt .
+
+    $default  reduce using rule 9 (stmt)
+
+
+State 21
+
+   10 stmt: returnstmt .
+
+    $default  reduce using rule 10 (stmt)
+
+
+State 22
+
+   11 stmt: exp .
+
+    $default  reduce using rule 11 (stmt)
+
+
+State 23
+
+    4 block: . '{' stmtlist '}'
+   12 ifstmt: IF exp . block elsestmt
+
+    '{'  shift, and go to state 6
+
+    block  转到状态 28
+
+
+State 24
+
+   17 dowhilestmt: DO block . WHILE exp
+
+    WHILE  shift, and go to state 29
+
+
+State 25
+
+    4 block: . '{' stmtlist '}'
+   16 whilestmt: WHILE exp . block
+
+    '{'  shift, and go to state 6
+
+    block  转到状态 30
+
+
+State 26
+
+   19 exp: '!' exp .
+
+    $default  reduce using rule 19 (exp)
+
+
+State 27
+
+   20 exp: '(' exp . ')'
+
+    ')'  shift, and go to state 31
+
+
+State 28
+
+   12 ifstmt: IF exp block . elsestmt
+   13 elsestmt: . %empty  [NAME, IF, DO, WHILE, RETURN, '}', '!', '(']
+   14         | . ELSE block
+   15         | . ELSE ifstmt
+
+    ELSE  shift, and go to state 32
+
+    $default  reduce using rule 13 (elsestmt)
+
+    elsestmt  转到状态 33
+
+
+State 29
+
+   17 dowhilestmt: DO block WHILE . exp
+   19 exp: . '!' exp
+   20    | . '(' exp ')'
+   21    | . NAME
+
+    NAME  shift, and go to state 9
+    '!'   shift, and go to state 15
+    '('   shift, and go to state 16
+
+    exp  转到状态 34
+
+
+State 30
+
+   16 whilestmt: WHILE exp block .
+
+    $default  reduce using rule 16 (whilestmt)
+
+
+State 31
+
+   20 exp: '(' exp ')' .
+
+    $default  reduce using rule 20 (exp)
+
+
+State 32
+
+    4 block: . '{' stmtlist '}'
+   12 ifstmt: . IF exp block elsestmt
+   14 elsestmt: ELSE . block
+   15         | ELSE . ifstmt
+
+    IF   shift, and go to state 10
+    '{'  shift, and go to state 6
+
+    block   转到状态 35
+    ifstmt  转到状态 36
+
+
+State 33
+
+   12 ifstmt: IF exp block elsestmt .
+
+    $default  reduce using rule 12 (ifstmt)
+
+
+State 34
+
+   17 dowhilestmt: DO block WHILE exp .
+
+    $default  reduce using rule 17 (dowhilestmt)
+
+
+State 35
+
+   14 elsestmt: ELSE block .
+
+    $default  reduce using rule 14 (elsestmt)
+
+
+State 36
+
+   15 elsestmt: ELSE ifstmt .
+
+    $default  reduce using rule 15 (elsestmt)
