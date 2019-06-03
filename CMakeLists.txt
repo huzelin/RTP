@@ -13,6 +13,7 @@ include_directories(
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}/
     ${PROJECT_SOURCE_DIR}/3rdparty/
+    ${PROJECT_SOURCE_DIR}/boost/boost-1.16.0/include/
     ${PROJECT_SOURCE_DIR}/3rdparty/gflags/gflags-v2.2.2/include/
     ${PROJECT_SOURCE_DIR}/3rdparty/zookeeper/zookeeper-3.4.14/include
     ${PROJECT_SOURCE_DIR}/3rdparty/grpc/grpc-1.20.0/include

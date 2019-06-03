@@ -17,12 +17,11 @@ RpcClient::RpcClient(const std::string& name, Type type, int32_t id = 0)
 RpcClient::~RpcClient() {}
 
 bool RpcClient::Init(const YAML::Node& config) {
-  CONFIG_OR_FAIL(config, "sk_server_path", sk_server_path_);
-  CONFIG_OR_FAIL(config, "sk_local_section_name", sk_local_section_name_);
-  CONFIG_OR_FAIL(config, "sk_snapshot_dir", sk_snapshot_dir_);
-  CONFIG_OR_FAIL(config, "sk_rpc_queue_size", sk_rpc_queue_size_);
-  CONFIG_OR_FAIL(config, "sk_request_timeout", sk_request_timeout_ms_);
-  CONFIG_OR_FAIL(config, "sk_reload_interval", sk_reload_interval_s_);
+  CONFIG_OR_FAIL(config, "leader_zk_host", leader_zk_host_);
+  CONFIG_OR_FAIL(config, "leader_server_path", leader_server_path_);
+  CONFIG_OR_FAIL(config, "leader_request_timeout", leader_request_timeout_ms_);
+  CONFIG_OR_FAIL(config, "leader_channel_count", leader_channel_count_);
+  CONFIG_OR_FAIL(config, "leader_hb_interval", leader_hb_interval_s_);
   return true;
 }
 
@@ -32,7 +31,6 @@ class RpcClosure : public google::protobuf::Closure {
  public:
   RpcClosure(RpcClient* client,
              google::protobuf::RpcChannel* channel,
-             const std::string& channel_spec,
              google::protobuf::RpcController* controller,
              google::protobuf::Closure* closure,
              const google::protobuf::Message* request,
@@ -40,7 +38,6 @@ class RpcClosure : public google::protobuf::Closure {
              bool* success)
       : client_(client),
         channel_(channel),
-        channel_spec_(channel_spec),
         controller_(controller),
         closure_(closure),
         request_(request),
@@ -103,7 +100,6 @@ class RpcClosure : public google::protobuf::Closure {
  private:
   RpcClient* client_;
   google::protobuf::RpcChannel* channel_;
-  std::string channel_spec_;
   google::protobuf::RpcController* controller_;
   google::protobuf::Closure* closure_;
   const google::protobuf::Message* request_;
@@ -118,10 +114,8 @@ void RpcClient::CallMethod(const google::protobuf::MethodDescriptor* method,
                            const google::protobuf::Message* request,
                            google::protobuf::Message* response,
                            google::protobuf::Closure* closure,
-                           bool* success,
-                           int64_t hint_key) {
+                           bool* success) {
   google::protobuf::RpcChannel* channel = nullptr;
-  std::string channel_spec;
   channel = GetChannel();
 
   if (channel == nullptr) {
@@ -148,14 +142,14 @@ void RpcClient::CallMethod(const google::protobuf::MethodDescriptor* method,
     FreeChannel(channel);
   } else {
     // async
-    RpcClosure* rpc_closure = new RpcClosure(this, channel, channel_spec, ctrl, closure,
+    RpcClosure* rpc_closure = new RpcClosure(this, channel, ctrl, closure,
                                              request, response, success);
     channel->CallMethod(method, ctrl, request, response, rpc_closure);
   }
 }
 
 void RpcClient::WarmUpChannel() {
-  for (int32_t i = 0; i < 100; ++i) {
+  for (int32_t i = 0; i < 500; ++i) {
     GetChannel();
   }
 }

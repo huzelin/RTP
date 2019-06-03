@@ -13,7 +13,7 @@ namespace orc {
 
 class RpcClient {
  public:
-  enum class Type {Arpc, Erpc};
+  enum class Type { Brpc };
 
   explicit RpcClient(const std::string& name, Type type, int32_t id);
   virtual ~RpcClient();
@@ -32,8 +32,7 @@ class RpcClient {
                           const google::protobuf::Message* request,
                           google::protobuf::Message* response,
                           google::protobuf::Closure* closure,
-                          bool* success,
-                          int64_t hint_key = -1);
+                          bool* success);
 
   void WarmUpChannel();
 
@@ -46,21 +45,12 @@ class RpcClient {
   std::string name_;
   Type type_;
   int32_t id_;
-  std::string sk_server_path_;
-  std::string sk_local_section_name_;
-  std::string sk_snapshot_dir_;
-  uint32_t sk_rpc_queue_size_;
-  uint32_t sk_request_timeout_ms_;
-  uint32_t sk_reload_interval_s_;
-
- public:
-  bool sk_dynamic_load_balance_;
-  uint32_t sk_dlb_refresh_interval_;
-  int32_t sk_dlb_proportional_factor_;
-  int32_t sk_dlb_weight_variance_;
-  int64_t sk_dlb_max_drop_rate_;
-  int64_t sk_dlb_drop_recover_rate_;
-  int64_t sk_dlb_drop_recover_pace_;
+  
+  std::string leader_zk_host_;
+  std::string leader_server_path_;
+  uint32_t leader_channel_count_;
+  uint32_t leader_request_timeout_ms_;
+  uint32_t leader_hb_interval_s_;
 
  private:
   ORC_DISALLOW_COPY_AND_ASSIGN(RpcClient);
